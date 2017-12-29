@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Local dir
+local current_dir='${PWD/#$HOME/~}'
+
 # Check for git
 local git_info='$(git_prompt_info)';
 if command -v "__git_ps1" >/dev/null 2>&1; then
