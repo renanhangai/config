@@ -11,6 +11,10 @@ if command -v "__git_ps1" >/dev/null 2>&1; then
 	GIT_PS1_SHOWUPSTREAM=1
 elif command -v "git_prompt_info" >/dev/null 2>&1; then
 	git_info='$(git_prompt_info)';
+	if [ "${git_info:0:4}" = "git:" ]; then
+		git_info="${git_info:4}"
+	fi
+	git_info=" ${git_info}"
 fi
 
 # Return script
