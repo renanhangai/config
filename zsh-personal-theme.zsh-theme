@@ -16,9 +16,17 @@ fi
 # Return script
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 
+# Check SSH client and Root
+local ps1_host="%{$terminfo[bold]$fg[green]%}%n@%{$HOST%}"
+if [ "$(id -u)" = "0" ]; then
+	ps1_host="%{$terminfo[bold]$fg[red]%}root:%n@%{$HOST%}"
+elif [ -n "$SSH_CLIENT" ]; then
+	ps1_host="%{$terminfo[bold]$fg[cyan]%}%n@%{$HOST%}"
+fi
+
 # Set the prompt
 PROMPT="
-%{$terminfo[bold]$fg[green]%}%n@%{$HOST%}%{$reset_color%}\
+${ps1_host}%{$reset_color%}\
 :\
 %{$terminfo[bold]$fg[blue]%}${current_dir}%{$reset_color%}\
 %{$terminfo[bold]$fg[yellow]%}${git_info}%{$reset_color%}
