@@ -2,20 +2,22 @@
 
 # Local dir
 local current_dir='${PWD/#$HOME/~}'
-
+local theme_dir=${0:a:h}
+	
 # Check for git
-local git_info='$(git_prompt_info)';
-if command -v "__git_ps1" >/dev/null 2>&1; then
-	git_info='$(__git_ps1)';
-    GIT_PS1_SHOWDIRTYSTATE=1
+local git_info=""
+if command -v "git" >/dev/null 2>&1; then
+	GIT_PS1_SHOWDIRTYSTATE=1
 	GIT_PS1_SHOWUPSTREAM=1
-elif command -v "git_prompt_info" >/dev/null 2>&1; then
-	git_info='$(git_prompt_info)';
-	if [ "${git_info:0:4}" = "git:" ]; then
-		git_info="${git_info:4}"
+	git_info='$(__git_ps1)';
+	if ! command -v "__git_ps1" >/dev/null 2>&1; then
+		if [ ! -f "${theme_dir}/git-prompt.sh" ]; then
+			curl -L "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh" > "${theme_dir}/git-prompt.sh"
+		fi
+		source "${theme_dir}/git-prompt.sh"
 	fi
-	git_info=" ${git_info}"
 fi
+
 
 # Return script
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
