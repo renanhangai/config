@@ -19,6 +19,15 @@ if command -v "git" >/dev/null 2>&1; then
 	fi
 fi
 
+# Virtual env theme
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+function theme_get_virtualenv() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        local virtualenv_name=$(basename "$VIRTUAL_ENV")
+        echo "%{$fg_bold[yellow]%}[${virtualenv_name}]%{$reset_color%} "
+    fi
+}
+local virtualenv_info='$(theme_get_virtualenv)'
 
 # Return script
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
@@ -33,7 +42,7 @@ fi
 
 # Set the prompt
 PROMPT="
-${ps1_host}%{$reset_color%}\
+${virtualenv_info}${ps1_host}%{$reset_color%}\
 :\
 %{$terminfo[bold]$fg[blue]%}${current_dir}%{$reset_color%}\
 %{$terminfo[bold]$fg[yellow]%}${git_info}%{$reset_color%}
